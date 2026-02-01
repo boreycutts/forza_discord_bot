@@ -50,6 +50,35 @@ Smoking on dope and I'm feeling sublime
 If you wanna feature, gotta pay a fine
 My glizzy is singing like it's Lil Shine
 I'm eating chicken, I can't fuck with the swine
+""",
+"""
+That bitch got thirty bodies, but you went on a date
+I love my plug, so I gave him a plate (bitch)
+He servin' that pack at a very low rate (okay)
+You ask for a gram, but I give you the shake
+These diamonds is drippin', gushin' like a lake (a lake)
+He see the uzi, I Eternal Atake (Eternal Atake)
+I'm countin' up guala, stackin' up the cake
+I'm in an Impala skrrtin' from the jakes
+""",
+"""
+Posted with BasedNas up in PG County (bitch)
+Clean, like some Downy (yuh)
+Grind for that sack, like Jadeveon Clowney (Jadevoen Clowney)
+Price on his head, they're lookin' for a bounty
+Keepin' an iron, like Robert Downey Jr
+Twitter talkin', okay boomer (pew)
+Bitch, I'm in Oklahoma, like a Sooner (pew, pew, pew)
+""",
+"""
+She give me brain, call her a tutor (bitch)
+You talkin' that shit, all I hear is a rumor (yuh)
+Off of the shrooms, I call me an Uber (okay)
+I love a bitch with a good sense of humor (yes)
+Got me a pint of Wock' up in the cooler (yes)
+You came out the mud, posted in the sewer
+I need the love, ain't talkin' computers
+Switchin' sides, I know you is a chooser (you is a chooser)
 """
 ]
 
@@ -440,7 +469,7 @@ async def on_message(message):
     user_message = str(message.content)
     if message.author == bot.user:
         return
-    if user_message.lower() == "hello" or user_message.lower() == "hi":
+    if "hello" in user_message.lower() or "hi" in user_message.lower():
         await message.channel.send(f"Shut yo bitch ass up we don't say hello in here 😤")
         return
     if "rap" in user_message.lower():
