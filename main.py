@@ -483,7 +483,7 @@ async def on_message(message):
     user_message = str(message.content)
     if message.author == bot.user:
         return
-    if random.randint(0,30) == 3 or "motorsport bot" in message.content or "bot" in message.content:
+    if "motorsport bot" in message.content or "bot" in message.content:
         print("Uh oh the bot mad as hell")
         await message.channel.send(ai_respond_to_user(message.content))
     if "hello" in user_message.lower():
