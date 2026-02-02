@@ -724,7 +724,9 @@ place_map = {
     "5": 10,
     "6": 8,
     "7": 6,
-    "8": 4 
+    "8": 4,
+    "9": 2,
+    "10": 1,
 }
 @bot.command()
 async def set_place(ctx, team_user:discord.Member, place):
