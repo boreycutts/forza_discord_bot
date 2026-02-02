@@ -472,7 +472,7 @@ def ai_respond_to_user(msg):
     return response.choices[0].message.content.split("\n")[0]
 
 def ai_generate_summary(msg):
-    prompt = f"Here's the track, racers and some scenarios that happened: {msg}. Can you dramatize it and tell me what happen in like a sports analyst way"
+    prompt = f"Here's the track, racers and some scenarios that happened: {msg}. Can you dramatize it and tell me what happen in like a sports analyst way. Make the message less than 2000 characters."
     response = ai.chat.completions.create(
         model="gpt-5-mini",
         messages=[
