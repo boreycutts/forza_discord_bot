@@ -636,9 +636,12 @@ async def start_league(ctx, season, number_of_races):
         except Exception as e:
             await ctx.send(f"{e}")
 
+def cmd_access(ctx):
+    return ctx.channel.name == "commands" and (ctx.author.display_name == "@boreycutts" or ctx.author.display_name == "@deathr0w927")
+
 @bot.command()
 async def reset_teams(ctx):
-  if ctx.channel.name == "commands":
+  if cmd_access(ctx):
     await ctx.send(f"This can't be undone and will be a pain in the ass to redo. Are you sure? [y/n]")
     print("waiting...")
     res = await bot.wait_for(
@@ -656,7 +659,7 @@ async def reset_teams(ctx):
 
 @bot.command()
 async def reset_points(ctx):
-  if ctx.channel.name == "commands":
+  if cmd_access(ctx):
     await ctx.send(f"This can't be undone and will be a pain in the ass to redo. Are you sure? [y/n]")
     print("waiting...")
     res = await bot.wait_for(
@@ -674,7 +677,7 @@ async def reset_points(ctx):
 
 @bot.command()
 async def add_team(ctx, user0:discord.Member, user1:discord.Member=None):
-  if ctx.channel.name == "commands":
+  if cmd_access(ctx):
     user0name = user0.display_name
     user1name = None
     if user1 != None:
@@ -684,7 +687,7 @@ async def add_team(ctx, user0:discord.Member, user1:discord.Member=None):
 
 @bot.command()
 async def remove_team(ctx, team_user):
-  if ctx.channel.name == "commands":
+  if cmd_access(ctx):
     await ctx.send(f"This can't be undone and will be a pain in the ass to redo. Are you sure? [y/n]")
     print("waiting...")
     res = await bot.wait_for(
@@ -704,7 +707,7 @@ async def remove_team(ctx, team_user):
 
 @bot.command()
 async def give_points(ctx, team_user:discord.Member, points, override=False):
-  if ctx.channel.name == "commands":
+  if cmd_access(ctx):
     team_username = team_user.display_name
     print(f"Giving {team_username} {points} points [override={override}]")
     ret = league_give_points(team_username, int(points), override=override)
