@@ -462,11 +462,21 @@ token = os.getenv('TOKEN')
 ai_key = os.getenv('OPENAI')
 ai = openai.OpenAI(api_key=ai_key)
 def ai_respond_to_user(msg):
+    prompt = f"Someone said \"{msg}\" to our discord bot. Respond as the bot in an angry and aggressive tone"
     response = ai.chat.completions.create(
         model="gpt-5-mini",
         messages=[
-            # {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": f"Someone said \"{msg}\" to our discord bot. Respond as the bot in an angry and aggressive tone"}
+            {"role": "user", "content": prompt}
+        ]
+    )
+    return response.choices[0].message.content.split("\n")[0]
+
+def ai_generate_summary(msg):
+    prompt = f"Here's the track, racers and some scenarios that happened: {msg}. Can you dramatize it and tell me what happen in like a sports analyst way"
+    response = ai.chat.completions.create(
+        model="gpt-5-mini",
+        messages=[
+            {"role": "user", "content": prompt}
         ]
     )
     return response.choices[0].message.content.split("\n")[0]
@@ -505,7 +515,7 @@ async def help(ctx):
     embed.add_field(name="`!ping`", value="Responds with 'Pong!", inline=False)
     embed.add_field(name="`!next_races`", value="Get the upcoming races", inline=False)
     embed.add_field(name="`!standings`", value="Get the current league standings", inline=False)
-    if ctx.channel.name == "commands":
+    if cmd_access(ctx):
         embed.add_field(name="`!start_league <season> <N>`", value="Starts the league for season <season> and creates a random set of <N> races", inline=False)
         embed.add_field(name="`!reset_teams`", value="Erase the teams list", inline=False)
         embed.add_field(name="`!reset_points`", value="Set all team points to 0", inline=False)
@@ -513,6 +523,7 @@ async def help(ctx):
         embed.add_field(name="`!remove_team <@user0/1>`", value="Remove the team that @user0 or @user1 is on", inline=False)
         embed.add_field(name="`!give_points <@user0/1> <points> <override=False>`", value="Give <points> to the team that @user0 or @user1 is on. Pass in <True> for override to set the points instead of adding.", inline=False)
         embed.add_field(name="`!set_place <@user0/1> <place>`", value="Set the place for the team that @user0 or @user1 is on so they get points.", inline=False)
+        embed.add_field(name="`!summarize_race <info>`", value="Get the bot to summarize the race.", inline=False)
     
     # embed.add_field(name="`!ping`", value="Responds with 'Pong!'", inline=False)
     await ctx.send(embed=embed)
@@ -734,7 +745,7 @@ place_map = {
 }
 @bot.command()
 async def set_place(ctx, team_user:discord.Member, place):
-    if ctx.channel.name == "commands":
+    if cmd_access(ctx):
         points = place_map[place]
         team_username = team_user.display_name
         ret = league_give_points(team_username, points)
@@ -742,6 +753,13 @@ async def set_place(ctx, team_user:discord.Member, place):
             await ctx.send(f'Team @{team_username} got {points} points')
         else:
             await ctx.send('Team not found')
+
+@bot.command()
+async def summarize_race(ctx):
+    if cmd_access(ctx):
+        msg = ctx.message.content.replace("!summarize_race", "")
+        channel = discord.utils.get(ctx.guild.channels, name="race-results")
+        await channel.send(ai_generate_summary(msg))
 
 # client.run(token)
 bot.run(token)
