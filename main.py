@@ -637,7 +637,8 @@ async def start_league(ctx, season, number_of_races):
             await ctx.send(f"{e}")
 
 def cmd_access(ctx):
-    return ctx.channel.name == "commands" and (ctx.author.display_name == "@boreycutts" or ctx.author.display_name == "@deathr0w927")
+    print(ctx.author.display_name)
+    return ctx.channel.name == "commands" and (ctx.author.display_name == "boreycutts" or ctx.author.display_name == "deathr0w927")
 
 @bot.command()
 async def reset_teams(ctx):
