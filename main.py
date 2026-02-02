@@ -6,7 +6,7 @@ import discord
 import os
 from dotenv import load_dotenv
 from discord.ext import commands
-import re
+import openai
 
 season = 0
 
@@ -457,6 +457,20 @@ league_load_teams()
 intents = discord.Intents.default()
 intents.message_content = True
 
+load_dotenv()
+token = os.getenv('TOKEN')
+ai_key = os.getenv('OPENAI')
+ai = openai.OpenAI(api_key=ai_key)
+def ai_respond_to_user(msg):
+    response = ai.chat.completions.create(
+        model="gpt-5-mini",
+        messages=[
+            # {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": f"Someone said \"{msg}\" to our discord bot. Respond as the bot in an angry and aggressive tone"}
+        ]
+    )
+    return response.choices[0].message.content.split("\n")[0]
+
 bot = commands.Bot(command_prefix="!", help_command=None, intents=intents)
 @bot.event
 async def on_ready():
@@ -469,7 +483,10 @@ async def on_message(message):
     user_message = str(message.content)
     if message.author == bot.user:
         return
-    if "hello" in user_message.lower() or "hi" in user_message.lower():
+    if random.randint(0,30) == 3 or "motorsport bot" in message.content or "bot" in message.content:
+        print("Uh oh the bot mad as hell")
+        await message.channel.send(ai_respond_to_user(message.content))
+    if "hello" in user_message.lower():
         await message.channel.send(f"Shut yo bitch ass up we don't say hello in here 😤")
         return
     if "rap" in user_message.lower():
@@ -698,7 +715,5 @@ async def give_points(ctx, team_user:discord.Member, points, override=False):
     else:
         await ctx.send('Team not found')
 
-load_dotenv()
-token = os.getenv('TOKEN')
 # client.run(token)
 bot.run(token)
