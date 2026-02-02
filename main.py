@@ -479,7 +479,7 @@ def ai_generate_summary(msg):
             {"role": "user", "content": prompt}
         ]
     )
-    return response.choices[0].message.content.split("\n")[0]
+    return response.choices[0].message.content
 
 bot = commands.Bot(command_prefix="!", help_command=None, intents=intents)
 @bot.event
