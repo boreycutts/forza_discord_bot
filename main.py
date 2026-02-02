@@ -512,6 +512,7 @@ async def help(ctx):
         embed.add_field(name="`!add_team <@user0> <@user1>`", value="Add a team with @user0 and @user1 as team members", inline=False)
         embed.add_field(name="`!remove_team <@user0/1>`", value="Remove the team that @user0 or @user1 is on", inline=False)
         embed.add_field(name="`!give_points <@user0/1> <points> <override=False>`", value="Give <points> to the team that @user0 or @user1 is on. Pass in <True> for override to set the points instead of adding.", inline=False)
+        embed.add_field(name="`!set_place <@user0/1> <place>`", value="Set the place for the team that @user0 or @user1 is on so they get points.", inline=False)
     
     # embed.add_field(name="`!ping`", value="Responds with 'Pong!'", inline=False)
     await ctx.send(embed=embed)
@@ -714,6 +715,27 @@ async def give_points(ctx, team_user:discord.Member, points, override=False):
             await ctx.send(f'Team @{team_username} got {points} points')
     else:
         await ctx.send('Team not found')
+
+place_map = {
+    "1": 25,
+    "2": 18,
+    "3": 15,
+    "4": 12,
+    "5": 10,
+    "6": 8,
+    "7": 6,
+    "8": 4 
+}
+@bot.command()
+async def set_place(ctx, team_user:discord.Member, place):
+    if ctx.channel.name == "commands":
+        points = place_map[place]
+        team_username = team_user.display_name
+        ret = league_give_points(team_username, points)
+        if ret:
+            await ctx.send(f'Team @{team_username} got {points} points')
+        else:
+            await ctx.send('Team not found')
 
 # client.run(token)
 bot.run(token)
