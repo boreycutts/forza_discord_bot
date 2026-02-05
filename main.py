@@ -462,7 +462,7 @@ token = os.getenv('TOKEN')
 ai_key = os.getenv('OPENAI')
 ai = openai.OpenAI(api_key=ai_key)
 def ai_respond_to_user(msg):
-    prompt = f"Someone said \"{msg}\" to our discord bot. Respond as the bot in an angry and aggressive tone"
+    prompt = f"Someone said \"{msg}\" to our discord bot. Respond as the bot in an angry and aggressive tone and in a british accent"
     response = ai.chat.completions.create(
         model="gpt-5-mini",
         messages=[
@@ -760,7 +760,20 @@ async def summarize_race(ctx):
     if cmd_access(ctx):
         msg = ctx.message.content.replace("!summarize_race", "")
         channel = discord.utils.get(ctx.guild.channels, name="race-results")
-        await channel.send(ai_generate_summary(msg))
+        summary = ai_generate_summary(msg)
+        await ctx.send(f"This good? [y/n]")
+        print("waiting...")
+        res = await bot.wait_for(
+            "message",
+            check=lambda x: x.channel.id == ctx.channel.id
+            and ctx.author.id == x.author.id
+            and x.content.lower() == "y"
+            or x.content.lower() == "n",
+            timeout=None,
+        )
+        print(f"Got res {res.content}")
+        if res.content == "y":
+            await channel.send(summary)
 
 # client.run(token)
 bot.run(token)
