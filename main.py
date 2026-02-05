@@ -469,7 +469,7 @@ def ai_respond_to_user(msg):
             {"role": "user", "content": prompt}
         ]
     )
-    response_split = response.choices[0].message.content.split("\n")[:-1]
+    response_split = response.choices[0].message.content.split("\n")
     response_trunc = ""
     for m in response_split:
         response_trunc += m
