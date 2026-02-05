@@ -469,7 +469,11 @@ def ai_respond_to_user(msg):
             {"role": "user", "content": prompt}
         ]
     )
-    return response.choices[0].message.content.split("\n")[0]
+    response_split = response.choices[0].message.content.split("\n")[:-1]
+    response_trunc = ""
+    for m in response_split:
+        response_trunc += m
+    return response_trunc
 
 def ai_generate_summary(msg):
     prompt = f"Here's the track, racers and some scenarios that happened: {msg}. Can you dramatize it and tell me what happen in like a sports analyst way. Make the message less than 2000 characters."
